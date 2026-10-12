@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mzuzu-connect-cosmetics-manager
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      - path: /service-worker.js
+        name: Cache-Control
+        value: no-cache

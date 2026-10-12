@@ -1,5 +1,5 @@
-const CACHE = "cosmetics-manager-v1";
-const FILES = ["./", "./index.html", "./style.css", "./app.js", "./manifest.json", "./icons/app-icon.svg"];
+const CACHE = "cosmetics-manager-v2";
+const FILES = ["./", "./index.html", "./style.css", "./app.js", "./manifest.json", "./icons/app-icon.svg", "./icons/app-icon-192.png", "./icons/app-icon-512.png"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
   self.skipWaiting();
