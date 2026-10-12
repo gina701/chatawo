@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Cosmetics Shop Manager",
+  "short_name": "Shop Manager",
+  "description": "Private offline-first cosmetics shop management app",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf8f9",
+  "theme_color": "#8b4562",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

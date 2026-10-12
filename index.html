@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8b4562">
+  <meta name="description" content="Private cosmetics shop stock, sales and expense manager.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>Cosmetics Manager</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">✿</div>
+    <div><p class="eyebrow">SHOP MANAGEMENT</p><h1 id="shopTitle">Cosmetics Manager</h1></div>
+    <button id="installBtn" class="install-btn hidden" type="button">Install app</button>
+  </header>
+
+  <main>
+    <section class="welcome panel">
+      <div><p class="eyebrow">YOUR BUSINESS, IN ONE PLACE</p><h2>Good business starts with good records.</h2><p class="muted">Manage products, record sales, track expenses and print receipts.</p></div>
+      <label class="shop-name-label">Shop name <input id="shopNameInput" maxlength="60" placeholder="Your cosmetics shop"></label>
+    </section>
+
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab active" data-view="dashboard">Dashboard</button>
+      <button class="tab" data-view="products">Products & Stock</button>
+      <button class="tab" data-view="sales">Record Sale</button>
+      <button class="tab" data-view="expenses">Expenses</button>
+      <button class="tab" data-view="history">History & Receipts</button>
+      <button class="tab" data-view="backup">Backup</button>
+    </nav>
+
+    <section id="view-dashboard" class="view">
+      <div class="section-heading"><div><p class="eyebrow">OVERVIEW</p><h2>Dashboard</h2></div><span id="todayLabel" class="date-chip"></span></div>
+      <div class="stats">
+        <article class="stat-card"><span>Today's sales</span><strong id="todaySales">MK 0</strong><small>Recorded revenue</small></article>
+        <article class="stat-card"><span>Today's expenses</span><strong id="todayExpenses">MK 0</strong><small>Recorded costs</small></article>
+        <article class="stat-card"><span>Estimated balance*</span><strong id="todayBalance">MK 0</strong><small>Sales minus expenses</small></article>
+        <article class="stat-card"><span>Products listed</span><strong id="productCount">0</strong><small id="lowStockCount">0 low in stock</small></article>
+      </div>
+      <div class="two-col">
+        <article class="panel"><div class="panel-title"><h3>Low-stock products</h3><button class="text-btn" data-goto="products">Manage stock →</button></div><div id="lowStockList" class="empty-state">No products yet. Add your first product in Products & Stock.</div></article>
+        <article class="panel"><div class="panel-title"><h3>Recent activity</h3><button class="text-btn" data-goto="history">View history →</button></div><div id="recentActivity" class="empty-state">Your sales and expenses will appear here.</div></article>
+      </div>
+      <p class="footnote">*This is a simple cash-flow estimate, not formal accounting profit. It does not subtract the cost of products sold unless you record that cost as an expense.</p>
+    </section>
+
+    <section id="view-products" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">INVENTORY</p><h2>Products & Stock</h2></div><button id="newProductBtn" class="primary">+ Add product</button></div>
+      <form id="productForm" class="panel form-grid hidden">
+        <h3 id="productFormTitle" class="full">Add a product</h3>
+        <input id="productId" type="hidden">
+        <label>Product name *<input id="productName" required maxlength="100" placeholder="e.g. Body lotion"></label>
+        <label>Category<select id="productCategory"><option>Skincare</option><option>Makeup</option><option>Perfume</option><option>Hair care</option><option>Body care</option><option>Nail products</option><option>Accessories</option><option>Other</option></select></label>
+        <label>Selling price (MWK) *<input id="productPrice" required type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>Quantity in stock *<input id="productQty" required type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>Low-stock alert at<input id="productThreshold" type="number" min="0" step="1" value="3" inputmode="numeric"></label>
+        <label>Cost price (MWK, optional)<input id="productCost" type="number" min="0" step="1" inputmode="numeric" placeholder="For profit estimates"></label>
+        <div class="form-actions full"><button class="primary" type="submit">Save product</button><button id="cancelProductBtn" class="secondary" type="button">Cancel</button></div>
+      </form>
+      <div class="toolbar"><input id="productSearch" type="search" placeholder="Search products..."><span id="inventorySummary" class="muted"></span></div>
+      <div class="table-wrap panel"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>In stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsTable"></tbody></table><div id="productsEmpty" class="empty-state">No products added yet.</div></div>
+    </section>
+
+    <section id="view-sales" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">POINT OF SALE</p><h2>Record a sale</h2></div></div>
+      <div class="two-col sale-layout">
+        <form id="saleForm" class="panel form-grid">
+          <h3 class="full">Sale details</h3>
+          <label class="full">Choose product<select id="saleProduct" required><option value="">Select a product</option></select></label>
+          <label>Quantity<input id="saleQty" type="number" min="1" step="1" value="1" required inputmode="numeric"></label>
+          <label>Payment method<select id="salePayment"><option>Cash</option><option>Mobile Money</option><option>Bank</option><option>Other</option></select></label>
+          <label class="full">Customer name (optional)<input id="saleCustomer" maxlength="80" placeholder="Walk-in customer"></label>
+          <label class="full">Discount (MWK)<input id="saleDiscount" type="number" min="0" step="1" value="0" inputmode="numeric"></label>
+          <div class="sale-total full"><span>Sale total</span><strong id="saleTotalPreview">MK 0</strong></div>
+          <button class="primary full" type="submit">Record sale & create receipt</button>
+          <p class="footnote full">Recording a sale reduces stock immediately. Check the product and quantity before saving.</p>
+        </form>
+        <article class="panel"><h3>Quick guide</h3><ol class="guide"><li>Select the product the customer bought.</li><li>Enter the quantity and any discount.</li><li>Check the total amount.</li><li>Record the sale, then print or save the receipt.</li></ol><div id="lastReceipt" class="receipt-preview muted">Your latest receipt will appear here after a sale.</div></article>
+      </div>
+    </section>
+
+    <section id="view-expenses" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">COST CONTROL</p><h2>Expenses</h2></div></div>
+      <form id="expenseForm" class="panel form-grid">
+        <h3 class="full">Record an expense</h3>
+        <label>Description *<input id="expenseDescription" required maxlength="120" placeholder="e.g. Transport, rent, supplies"></label>
+        <label>Amount (MWK) *<input id="expenseAmount" required type="number" min="1" step="1" inputmode="numeric"></label>
+        <label>Category<select id="expenseCategory"><option>Stock purchase</option><option>Transport</option><option>Rent</option><option>Utilities</option><option>Packaging</option><option>Wages</option><option>Other</option></select></label>
+        <label>Date<input id="expenseDate" type="date" required></label>
+        <div class="form-actions full"><button class="primary" type="submit">Save expense</button></div>
+      </form>
+      <div class="panel table-wrap"><h3>Recent expenses</h3><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead><tbody id="expensesTable"></tbody></table><div id="expensesEmpty" class="empty-state">No expenses recorded yet.</div></div>
+    </section>
+
+    <section id="view-history" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">RECORDS</p><h2>History & Receipts</h2></div></div>
+      <div class="panel table-wrap"><h3>Sales history</h3><table><thead><tr><th>Receipt</th><th>Date</th><th>Product</th><th>Qty</th><th>Payment</th><th>Total</th><th></th></tr></thead><tbody id="salesTable"></tbody></table><div id="salesEmpty" class="empty-state">No sales recorded yet.</div></div>
+    </section>
+
+    <section id="view-backup" class="view hidden">
+      <div class="section-heading"><div><p class="eyebrow">YOUR DATA</p><h2>Backup & Settings</h2></div></div>
+      <div class="two-col">
+        <article class="panel"><h3>Back up shop records</h3><p class="muted">Export products, sales and expenses to a JSON backup file. Save it somewhere safe. Do this regularly.</p><button id="exportBtn" class="primary">Download backup</button><div class="spacer"></div><label>Restore from a backup file<input id="importFile" type="file" accept=".json,application/json"></label><p class="footnote">Restoring replaces the records currently stored on this phone.</p></article>
+        <article class="panel"><h3>Privacy and data</h3><ul class="guide"><li>Records are stored in this browser on this phone.</li><li>They are not automatically sent to a server.</li><li>Do not clear browser/site data unless you have a backup.</li><li>Protect the phone with a screen lock.</li><li>This starter app has no password login. Anyone who can open it on this phone may see the records.</li></ul><button id="clearDataBtn" class="danger">Delete all shop data</button></article>
+      </div>
+    </section>
+  </main>
+  <footer><span>Made for small beauty businesses</span><span>Offline-first • Data stored on this device</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
